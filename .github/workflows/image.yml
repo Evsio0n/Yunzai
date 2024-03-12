@@ -37,5 +37,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }},ghcr.io/evsio0n/sock2tcp:latest
+          tags: ${{ steps.meta.outputs.tags }},ghcr.io/evsio0n/Yunzai:latest
           labels: ${{ steps.meta.outputs.labels }}
