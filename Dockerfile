@@ -17,6 +17,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
 
 FROM base
 COPY --from=prod-deps /app /app
+#Add git
+RUN apt-get update && apt-get install -y git
 #SetTimezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 LABEL authors="evsio0n"
