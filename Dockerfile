@@ -7,20 +7,34 @@ COPY . /app
 WORKDIR /app
 
 FROM base AS prod-deps
-RUN apt-get update && apt-get install -y git
+# Enter workdir
+WORKDIR /app
+#Add deps chrome
+RUN apt-get update && apt-get install -y \
+    git chromium python3-pip python-is-python3 python3-poetry xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/Yunzai-genshin plugins/genshin
 RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/miao-plugin
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/TRSS-Plugin plugins/TRSS-Plugin
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
+RUN cd plugins/TRSS-Plugin
+RUN poetry install
+RUN poetry run pip install monotonic-align
+RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/ChatWaifu
+RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/GenshinVoice
+RUN cd ChatWaifu
+RUN curl -LO https://github.com/TimeRainStarSky/TRSS-Plugin/releases/download/latest/ChatWaifuCN.txz
+RUN tar -xvJf ChatWaifuCN.txz
+RUN curl -LO https://github.com/TimeRainStarSky/TRSS-Plugin/releases/download/latest/G_809000.pth.xz
+RUN xz -dv G_809000.pth.xz
 
-
-
-FROM base
-COPY --from=prod-deps /app /app
-#Add git
-RUN apt-get update && apt-get install -y git
+FROM prod-deps
 #SetTimezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+
+
 LABEL authors="evsio0n"
 
 ENTRYPOINT ["node", "."]
