@@ -20,12 +20,12 @@ RUN git clone --depth 1 https://github.com/TimeRainStarSky/Yunzai-genshin plugin
 RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/miao-plugin
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/TRSS-Plugin plugins/TRSS-Plugin
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
-RUN cd /app/plugins/TRSS-Plugin
+WORKDIR /app/plugins/TRSS-Plugin
 RUN poetry install
 RUN poetry run pip install monotonic-align
 RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/ChatWaifu
 RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/GenshinVoice
-RUN cd ChatWaifu
+WORKDIR /app/plugins/TRSS-Plugin/ChatWaifu
 RUN curl -LO https://github.com/TimeRainStarSky/TRSS-Plugin/releases/download/latest/ChatWaifuCN.txz
 RUN tar -xvJf ChatWaifuCN.txz
 RUN curl -LO https://github.com/TimeRainStarSky/TRSS-Plugin/releases/download/latest/G_809000.pth.xz
