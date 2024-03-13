@@ -21,6 +21,7 @@ RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/mi
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/TRSS-Plugin plugins/TRSS-Plugin
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
 WORKDIR /app/plugins/TRSS-Plugin
+RUN poetry lock
 RUN poetry install
 RUN poetry run pip install monotonic-align
 RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/ChatWaifu
