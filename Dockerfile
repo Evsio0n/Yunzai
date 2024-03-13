@@ -1,9 +1,11 @@
 FROM node:20-slim AS base
 MAINTAINER evsio0n
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME/bin:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PATH:/root/.local/bin"
 RUN corepack enable
 COPY . /app
+#Remove Dockerfile
+RUN rm -rf /app/Dockerfile
 WORKDIR /app
 
 FROM base AS prod-deps
@@ -13,7 +15,6 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git chromium python3-pip python-is-python3 pipx xz-utils \
     && rm -rf /var/lib/apt/lists/* \
-# Install python3-poetry from source
 RUN pipx install poetry
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/Yunzai-genshin plugins/genshin
 RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/miao-plugin
