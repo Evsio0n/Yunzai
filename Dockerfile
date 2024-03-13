@@ -11,13 +11,15 @@ FROM base AS prod-deps
 WORKDIR /app
 #Add deps chrome
 RUN apt-get update && apt-get install -y \
-    git chromium python3-pip python-is-python3 python3-poetry xz-utils \
-    && rm -rf /var/lib/apt/lists/*
+    git chromium python3-pip python-is-python3 pipx xz-utils \
+    && rm -rf /var/lib/apt/lists/* \
+# Install python3-poetry from source
+RUN pipx install poetry
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/Yunzai-genshin plugins/genshin
 RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/miao-plugin
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/TRSS-Plugin plugins/TRSS-Plugin
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
-RUN cd plugins/TRSS-Plugin
+RUN cd /app/plugins/TRSS-Plugin
 RUN poetry install
 RUN poetry run pip install monotonic-align
 RUN git clone --depth 1 https://gitee.com/TimeRainStarSky/ChatWaifu
@@ -29,6 +31,8 @@ RUN curl -LO https://github.com/TimeRainStarSky/TRSS-Plugin/releases/download/la
 RUN xz -dv G_809000.pth.xz
 
 FROM prod-deps
+# Enter workdir
+WORKDIR /app
 #SetTimezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
