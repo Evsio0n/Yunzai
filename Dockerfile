@@ -14,7 +14,7 @@ WORKDIR /app
 #Add deps chrome
 RUN apt-get update && apt-get install -y \
     git chromium python3-pip python-is-python3 pipx xz-utils \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 RUN pipx install poetry
 RUN git clone --depth 1 https://github.com/TimeRainStarSky/Yunzai-genshin plugins/genshin
 RUN git clone --depth 1 https://github.com/yoimiya-kokomi/miao-plugin plugins/miao-plugin
